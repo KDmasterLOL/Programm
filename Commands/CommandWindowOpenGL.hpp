@@ -95,7 +95,7 @@ public:
     {
         glClear(GL_COLOR_BUFFER_BIT);
         static float Scale = 0.0f;
-
+        mat = glm::translate(mat,glm::vec3(0.005f,0,0.005f));
         Scale += 0.001f;
         glUniform1f(ScaleLocation, Scale);
         glUniformMatrix4fv(MatLocation, 1, GL_TRUE, &mat[0][0]);
