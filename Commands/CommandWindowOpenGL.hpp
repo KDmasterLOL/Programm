@@ -25,8 +25,11 @@ private:
     SDL_GLContext gl_context;
     SDL_Rect rect_background = {0, 0, window_width, window_heigth};
     GLuint vbo;
+    GLuint shader_programm;
     std::string shader_vs = "vertex_shader.vs", shader_fs = "fragment_shader.fs";
     std::vector<glm::vec3> vec = {{0, -1, 0}, {1, 1, 0}, {-1, 1, 0}};
+    glm::mat4 mat = glm::mat4(1.0f);
+    GLuint ScaleLocation, MatLocation;
 
 public:
     CommandWindowOpenGL() : Command("Command WindowOpenGL") {}
@@ -48,6 +51,8 @@ public:
 
     bool InitData()
     {
+        ScaleLocation = glGetUniformLocation(shader_programm, "Scale");
+        MatLocation = glGetUniformLocation(shader_programm, "mat");
         glGenBuffers(1, &vbo);
         glBindBuffer(GL_ARRAY_BUFFER, vbo);
         glBufferData(GL_ARRAY_BUFFER, vec.size() * sizeof(glm::vec3), &vec.front(), GL_STATIC_DRAW);
@@ -64,7 +69,7 @@ public:
             InitContextGL(&gl_context, window);
             InitGLEW();
             InitGL();
-            InitShader(shader_vs, shader_fs);
+            shader_programm = InitShader(shader_vs, shader_fs);
             InitData();
             return true;
         }
@@ -80,6 +85,7 @@ public:
     }
     void Draw()
     {
+
         SDL_FillRect(surface_screen, NULL, SDL_MapRGB(surface_screen->format, 0, 0, 0));
         SDL_BlitScaled(textures.at(ID_table).texture, NULL, surface_screen, &textures.at(ID_table).pos);
         SDL_UpdateWindowSurface(window);
@@ -88,7 +94,11 @@ public:
     void DrawGL()
     {
         glClear(GL_COLOR_BUFFER_BIT);
+        static float Scale = 0.0f;
 
+        Scale += 0.001f;
+        glUniform1f(ScaleLocation, Scale);
+        glUniformMatrix4fv(MatLocation, 1, GL_TRUE, &mat[0][0]);
         glEnableVertexAttribArray(0);
         glBindBuffer(GL_ARRAY_BUFFER, vbo);
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);

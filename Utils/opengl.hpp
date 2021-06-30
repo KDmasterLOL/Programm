@@ -35,10 +35,10 @@ void CreateShader(GLuint shader_programm, std::string shader_text, GLenum shader
 
     glAttachShader(shader_programm, shader_obj);
 }
-void InitShader(std::string shader_path_vs, std::string shader_path_fs)
+unsigned int InitShader(std::string shader_path_vs, std::string shader_path_fs)
 {
-    GLuint shader_program = glCreateProgram();
-    if (shader_program == 0)
+    GLuint shader_programm = glCreateProgram();
+    if (shader_programm == 0)
         throw std::runtime_error("Error creating shader programm");
 
     std::string vs, fs;
@@ -46,29 +46,32 @@ void InitShader(std::string shader_path_vs, std::string shader_path_fs)
     ReadFile(shader_path_vs, vs);
     ReadFile(shader_path_fs, fs);
 
-    CreateShader(shader_program, vs.c_str(), GL_VERTEX_SHADER);
-    CreateShader(shader_program, fs.c_str(), GL_FRAGMENT_SHADER);
+    CreateShader(shader_programm, vs.c_str(), GL_VERTEX_SHADER);
+    CreateShader(shader_programm, fs.c_str(), GL_FRAGMENT_SHADER);
 
     GLint Success = 0;
     GLchar ErrorLog[1024] = {0};
 
-    glLinkProgram(shader_program);
-    glGetProgramiv(shader_program, GL_LINK_STATUS, &Success);
+    glLinkProgram(shader_programm);
+    glGetProgramiv(shader_programm, GL_LINK_STATUS, &Success);
     if (Success == 0)
     {
-        glGetProgramInfoLog(shader_program, sizeof(ErrorLog), NULL, ErrorLog);
+        glGetProgramInfoLog(shader_programm, sizeof(ErrorLog), NULL, ErrorLog);
         fprintf(stderr, "Error linking shader program: '%s'\n", ErrorLog);
         exit(1);
     }
 
-    glValidateProgram(shader_program);
-    glGetProgramiv(shader_program, GL_VALIDATE_STATUS, &Success);
+    glValidateProgram(shader_programm);
+    glGetProgramiv(shader_programm, GL_VALIDATE_STATUS, &Success);
     if (!Success)
     {
-        glGetProgramInfoLog(shader_program, sizeof(ErrorLog), NULL, ErrorLog);
+        glGetProgramInfoLog(shader_programm, sizeof(ErrorLog), NULL, ErrorLog);
         fprintf(stderr, "Invalid shader program: '%s'\n", ErrorLog);
         exit(1);
     }
 
-    glUseProgram(shader_program);
+    glUseProgram(shader_programm);
+
+
+    return shader_programm;
 }
