@@ -1,0 +1,7 @@
+#include"Commands/CommandData.hpp"
+#include"Commands/CommandExit.hpp"
+#include"Commands/CommandHello.hpp"
+#include"Commands/CommandLoad.hpp"
+#include"Commands/CommandWindow.hpp"
+#include"Commands/CommandWindowOpenGL.hpp"
+#include"Commands/CommandChouse.hpp"
