@@ -51,7 +51,6 @@ public:
 
     bool InitData()
     {
-        ScaleLocation = glGetUniformLocation(shader_programm, "Scale");
         MatLocation = glGetUniformLocation(shader_programm, "mat");
         glGenBuffers(1, &vbo);
         glBindBuffer(GL_ARRAY_BUFFER, vbo);
@@ -94,10 +93,11 @@ public:
     void DrawGL()
     {
         glClear(GL_COLOR_BUFFER_BIT);
-        static float Scale = 0.0f;
-        mat = glm::translate(mat,glm::vec3(0.005f,0,0.005f));
-        Scale += 0.001f;
-        glUniform1f(ScaleLocation, Scale);
+        mat = glm::translate(glm::mat4(1.0f), glm::vec3(0.2f, 0.0f, 0));
+        for(int i=0;i<4;i++)for(int a = 0;a<4;a++)std::cout<<mat[i][a];
+        // mat = glm::rotate(mat,0.005f,glm::vec3(1.0f));
+        // mat = glm::scale(mat, glm::vec3(0.5f));
+        
         glUniformMatrix4fv(MatLocation, 1, GL_TRUE, &mat[0][0]);
         glEnableVertexAttribArray(0);
         glBindBuffer(GL_ARRAY_BUFFER, vbo);
