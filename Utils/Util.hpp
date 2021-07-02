@@ -1,10 +1,12 @@
 #pragma once
 #include"Commands/Command.hpp"
 #include<vector>
+using std::cout;
+using std::endl;
 void ReadFile(std::string file_name, std::string &out_file)
 {
     std::ifstream f(file_name.c_str());
-
+    
     if (f.is_open())
     {
         std::string line;

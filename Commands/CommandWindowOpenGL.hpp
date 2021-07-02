@@ -15,7 +15,6 @@ private:
         SDL_Surface *texture;
         SDL_Rect pos;
     };
-
     int16_t window_heigth = 600,
             window_width = 800;
     SDL_Surface *surface_screen;
@@ -30,6 +29,7 @@ private:
     std::vector<glm::vec3> vec = {{0, -1, 0}, {1, 1, 0}, {-1, 1, 0}};
     glm::mat4 mat = glm::mat4(1.0f);
     GLuint ScaleLocation, MatLocation;
+    bool is_rotate = false, is_translate = false, is_repeat = false, is_scale = false;
 
 public:
     CommandWindowOpenGL() : Command("Command WindowOpenGL") {}
@@ -78,9 +78,21 @@ public:
             return false;
         }
     }
-
-    void Move()
+    void ShowKeyBind()
     {
+        std::cout << "R - recover\n"
+                  << "F - repeat\n"
+                  << "A - translate\n"
+                  << "W - rotate\n"
+                  << "S - scale" << std::endl;
+    }
+    void RecoverDefaultSetting()
+    {
+        mat = glm::mat4(1.f);
+        is_repeat = false;
+        is_rotate = false;
+        is_translate = false;
+        is_scale = false;
     }
     void Draw()
     {
@@ -93,12 +105,12 @@ public:
     void DrawGL()
     {
         glClear(GL_COLOR_BUFFER_BIT);
-        mat = glm::translate(glm::mat4(1.0f), glm::vec3(0.2f, 0.0f, 0));
-        for(int i=0;i<4;i++)for(int a = 0;a<4;a++)std::cout<<mat[i][a];
-        // mat = glm::rotate(mat,0.005f,glm::vec3(1.0f));
-        // mat = glm::scale(mat, glm::vec3(0.5f));
-        
-        glUniformMatrix4fv(MatLocation, 1, GL_TRUE, &mat[0][0]);
+        if (is_translate)
+            mat = glm::translate(mat, glm::vec3(0.01f, 0.01f, 0.f));
+        if (is_scale)
+            mat = glm::scale(mat, glm::vec3(0.99f));
+
+        glUniformMatrix4fv(MatLocation, 1, GL_TRUE, glm::value_ptr(mat));
         glEnableVertexAttribArray(0);
         glBindBuffer(GL_ARRAY_BUFFER, vbo);
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
@@ -107,6 +119,15 @@ public:
         glDisableVertexAttribArray(0);
         SDL_GL_SwapWindow(window);
         SDL_Delay(16);
+    }
+    void ProccesingKey()
+    {
+        if (GetKeyDownUp(SDLK_r))
+            RecoverDefaultSetting();
+        is_translate = GetKeyDownUp(SDLK_a);
+        is_repeat = GetKeyDownUp(SDLK_f);
+        is_scale = GetKeyDownUp(SDLK_s);
+        is_rotate = GetKeyDownUp(SDLK_w);
     }
     void LoapSDL()
     {
@@ -132,13 +153,13 @@ public:
                     break;
                 }
             }
-            play = !ProccesingKey(SDLK_ESCAPE);
-            Move();
+            play = !GetKeyDownUp(SDLK_ESCAPE);
+            ProccesingKey();
             // Draw();
             DrawGL();
         }
     }
-    bool ProccesingKey(int key)
+    bool GetKeyDownUp(int key)
     {
         try
         {
@@ -181,6 +202,7 @@ public:
     {
         if (!Init())
             return;
+        ShowKeyBind();
         LoapSDL();
         Quit();
     }

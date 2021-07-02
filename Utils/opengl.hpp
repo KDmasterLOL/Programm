@@ -1,6 +1,16 @@
 #pragma once
-#include <GL/glew.h>
+// Include
 #include <Utils/Util.hpp>
+#include <glm/gtc/type_ptr.hpp>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/mat4x4.hpp>
+#include <glm/vec3.hpp>
+#include <GL/glew.h>
+// Using
+using glm::vec3;
+using glm::mat4;
+
 void InitGLEW()
 {
     GLenum err = glewInit();
@@ -71,7 +81,6 @@ unsigned int InitShader(std::string shader_path_vs, std::string shader_path_fs)
     }
 
     glUseProgram(shader_programm);
-
 
     return shader_programm;
 }
