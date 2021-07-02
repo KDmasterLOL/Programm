@@ -25,7 +25,7 @@ private:
     SDL_Rect rect_background = {0, 0, window_width, window_heigth};
     GLuint vbo;
     GLuint shader_programm;
-    std::string shader_vs = "vertex_shader.vs", shader_fs = "fragment_shader.fs";
+    std::string shader_vs = "shaders/vertex_shader.vs", shader_fs = "shaders/fragment_shader.fs";
     std::vector<glm::vec3> vec = {{0, -1, 0}, {1, 1, 0}, {-1, 1, 0}};
     glm::mat4 mat = glm::mat4(1.0f);
     GLuint ScaleLocation, MatLocation;

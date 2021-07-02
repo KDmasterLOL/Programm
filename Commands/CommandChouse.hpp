@@ -1,6 +1,9 @@
 #pragma once
-#include "Command.hpp"
+// Include
 #include "Commands.hpp"
+// Type alises
+using vector_command = std::vector<Command*>;
+
 class CommandChouse : public Command
 {
 private:
@@ -8,7 +11,7 @@ private:
     bool play = true;
 
 public:
-    CommandChouse(std::vector<Command *> commands) : Command("Command Chouse")
+    CommandChouse(vector_command commands) : Command("Command Chouse")
     {
         this->commands = commands;
         this->commands.push_back(new CommandExit(play));
