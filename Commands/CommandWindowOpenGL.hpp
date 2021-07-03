@@ -122,12 +122,12 @@ public:
     }
     void ProccesingKey()
     {
-        if (GetKeyDownUp(SDLK_r))
+        if (GetKeyDownUp(keys,SDLK_r))
             RecoverDefaultSetting();
-        is_translate = GetKeyDownUp(SDLK_a);
-        is_repeat = GetKeyDownUp(SDLK_f);
-        is_scale = GetKeyDownUp(SDLK_s);
-        is_rotate = GetKeyDownUp(SDLK_w);
+        is_translate = GetKeyDownUp(keys,SDLK_a);
+        is_repeat = GetKeyDownUp(keys,SDLK_f);
+        is_scale = GetKeyDownUp(keys,SDLK_s);
+        is_rotate = GetKeyDownUp(keys,SDLK_w);
     }
     void LoapSDL()
     {
@@ -144,43 +144,22 @@ public:
                     play = false;
                     break;
                 case SDL_KEYDOWN:
-                    KeyCheck(e.key.keysym.sym, true);
+                    KeyCheck(keys,e.key.keysym.sym, true);
                     break;
                 case SDL_KEYUP:
-                    KeyCheck(e.key.keysym.sym, false);
+                    KeyCheck(keys,e.key.keysym.sym, false);
                     break;
                 default:
                     break;
                 }
             }
-            play = !GetKeyDownUp(SDLK_ESCAPE);
+            play = !GetKeyDownUp(keys,SDLK_ESCAPE);
             ProccesingKey();
             // Draw();
             DrawGL();
         }
     }
-    bool GetKeyDownUp(int key)
-    {
-        try
-        {
-            return keys.at(key);
-        }
-        catch (std::out_of_range)
-        {
-            return false;
-        }
-    }
-    void KeyCheck(SDL_Keycode key, bool down_up)
-    {
-        try
-        {
-            keys.at(key) = down_up;
-        }
-        catch (std::out_of_range exc)
-        {
-            keys.insert(std::pair<SDL_Keycode, bool>(key, down_up));
-        }
-    }
+
     void Quit()
     {
         SDL_DestroyWindow(window);
@@ -201,7 +180,10 @@ public:
     void Run()
     {
         if (!Init())
+        {
+            Quit();
             return;
+        }
         ShowKeyBind();
         LoapSDL();
         Quit();

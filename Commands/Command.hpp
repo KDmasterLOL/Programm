@@ -1,14 +1,9 @@
 #pragma once
-#include <iostream>
-#include <sqlite3.h>
-#include <string_view>
-#include <fstream>
-#include <cstdlib>
-#include <exception>
-#include <vector>
-#include <map>
-#include "Utils/opengl.hpp"
-#include "Utils/InitSDL.hpp"
+// Include
+#include "Utils/Util.hpp"
+#include "Utils/UtilOpengl.hpp"
+#include "Utils/UtilSDL.hpp"
+// Class Command for Inheritated
 class Command
 {
 private:

@@ -1,8 +1,7 @@
 #pragma once
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
-#include <stdexcept>
-#include <string>
+// Include
+#include "Utils/SDLUtils/UtilSDLHeaders.hpp"
+// Functions
 void InitSDL(Uint32 flag = SDL_INIT_EVERYTHING)
 {
     if (SDL_Init(flag) != 0)
@@ -28,7 +27,14 @@ void InitWndSurf(SDL_Window *window, SDL_Surface **surface)
     if (*surface == nullptr)
         throw std::runtime_error("Surface screen not init:" + std::string(SDL_GetError()));
 }
-void InitContextGL(SDL_GLContext *gl_context, SDL_Window* window)
+void InitRenderer(SDL_Window *window, SDL_Renderer **render, Uint32 flag = SDL_RENDERER_ACCELERATED)
+{
+    *render = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+    if (render == nullptr)
+        throw std::runtime_error("Renderer not init:" + std::string(SDL_GetError()));
+    SDL_SetRenderDrawColor(*render, 0, 0, 0, 0);
+}
+void InitContextGL(SDL_GLContext *gl_context, SDL_Window *window)
 {
     *gl_context = SDL_GL_CreateContext(window);
     if (*gl_context == nullptr)
@@ -36,11 +42,10 @@ void InitContextGL(SDL_GLContext *gl_context, SDL_Window* window)
 }
 SDL_Surface *InitSurfaceFromFile(std::string path, SDL_Surface *surface_screen)
 {
-
     SDL_Surface *buffer_image, *buffer_texture;
     buffer_texture = IMG_Load(path.c_str());
     if (buffer_texture == nullptr)
-        throw std::runtime_error(path + " not createn");
+        throw std::runtime_error(path + " not createn" + std::string(IMG_GetError()));
     buffer_image = SDL_ConvertSurface(buffer_texture, surface_screen->format, 0);
     if (buffer_image != nullptr)
     {
@@ -50,5 +55,34 @@ SDL_Surface *InitSurfaceFromFile(std::string path, SDL_Surface *surface_screen)
     else
     {
         return buffer_texture;
+    }
+}
+SDL_Texture *InitTextureFromSurface(SDL_Surface *surface, SDL_Renderer *renderer)
+{
+    SDL_Texture *texture;
+    texture = SDL_CreateTextureFromSurface(renderer, surface);
+    SDL_FreeSurface(surface);
+    return texture;
+}
+bool GetKeyDownUp(map_keys keys, int key)
+{
+    try
+    {
+        return keys.at(key);
+    }
+    catch (std::out_of_range)
+    {
+        return false;
+    }
+}
+void KeyCheck(map_keys keys, SDL_Keycode key, bool down_up)
+{
+    try
+    {
+        keys.at(key) = down_up;
+    }
+    catch (std::out_of_range exc)
+    {
+        keys.insert(std::pair<SDL_Keycode, bool>(key, down_up));
     }
 }

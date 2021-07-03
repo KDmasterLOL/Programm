@@ -1,9 +1,4 @@
 #include "Commands.hpp"
-#include"Commands/Command.hpp"
-#include"Utils/Util.hpp"
-#include <iostream>
-#include <vector>
-
 int main()
 {
     // Vector of commands

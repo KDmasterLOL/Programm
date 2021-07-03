@@ -1,8 +1,21 @@
 #pragma once
-#include"Commands/Command.hpp"
+// Include
+#include<functional>
 #include<vector>
+#include <iostream>
+#include <sqlite3.h>
+#include <string_view>
+#include <fstream>
+#include <cstdlib>
+#include <exception>
+#include <map>
+// Using
 using std::cout;
 using std::endl;
+using std::runtime_error;
+using std::string;
+using namespace std::placeholders;
+// Fuctions
 void ReadFile(std::string file_name, std::string &out_file)
 {
     std::ifstream f(file_name.c_str());
@@ -20,34 +33,3 @@ void ReadFile(std::string file_name, std::string &out_file)
     else
         throw std::runtime_error("file not open:" + file_name);
 }
-// void UserChouseFromCommandVect()
-// {
-//     std::vector<Command*> command_vector;
-//     for (int command = 0; command < command_vector.size(); command++)
-//     {
-//         std::cout << command << ".";
-//         command_vector[command]->ShowCommandName();
-//     }
-//     std::cin.exceptions(std::ios_base::badbit | std::ios_base::failbit);
-//     while (true)
-//     {
-//         std::cout << "Chouse command - " << std::endl;
-//         int command;
-//         try
-//         {
-//             std::cin >> command;
-//             command_vector.at(command)
-//                 ->Run();
-//         }
-//         catch (std::ios::failure exc)
-//         {
-//             std::cerr << "not actual enter, try again enter number" << std::endl;
-//             std::cin.clear();
-//             std::cin.ignore(32767, '\n');
-//         }
-//         catch (std::out_of_range exc)
-//         {
-//             std::cout << "enter again number of list" << std::endl;
-//         }
-//     }
-// }
