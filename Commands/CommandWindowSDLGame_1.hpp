@@ -4,16 +4,19 @@
 class SDLWindowSDLGame_1 : public SDL_class
 {
 protected:
-enum ID_TEXTURES{
-    ID_TEXTURE_HELLO_TABLE,
-};
+    enum ID_TEXTURES
+    {
+        // ID_TEXTURE_
+        ID_TEXTURE_HelloTable,
+    };
+    enum ID_OBJECTS{
+        // ID_OBJECT_
+        ID_OBJECT_Background,
+    };
     void InitData()
     {
-        text.insert(std::pair<int,TextureObject>(ID_TEXTURE_HELLO_TABLE,TextureObject{"res/Hello.png"}));
-        for(auto &text_obj:text){
-        SDL_Texture* buffer = InitTextureFromSurface(InitSurfaceFromFile(text_obj.second.path,window_surface),render);
-        text[text_obj.first].texture = buffer;
-        }
+        paths.insert(pair_path_to_texture(ID_TEXTURE_HelloTable, "res/Hello.png"));
+        InitTextureMapByPathMap();2
     }
 };
 class CommandWindowSDLGame_1 : public Command, public SDLWindowSDLGame_1

@@ -1,6 +1,5 @@
 #pragma once
-// Include
-#include "Utils/SDLUtils/UtilSDLHeaders.hpp"
+#include "Utils/SDLUtils/UtilSDLHeaders.hpp" // SDL Headers
 // Class
 class SDL_class
 {
@@ -9,7 +8,7 @@ protected:
     SDL_Surface *window_surface;
     SDL_Renderer *render;
     map_texture textures;
-    map_texture_objects text;
+    map_path_to_texture paths;
     map_keys keys;
 
 public:
@@ -36,6 +35,16 @@ public:
     virtual void Draw() {}
     virtual void ProccesingKey() {}
     virtual void InitData() {}
+    void InitTextureMapByPathMap()
+    {
+        for (auto path : paths)
+        {
+            SDL_Texture *buffer = InitTextureFromSurface(
+                InitSurfaceFromFile(path.second, window_surface),
+                render);
+            textures.insert(pair_texture(path.first, buffer));
+        }
+    }
     virtual void QuitSDL()
     {
         SDL_DestroyWindow(window);
