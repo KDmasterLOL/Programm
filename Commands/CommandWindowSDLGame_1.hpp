@@ -16,7 +16,12 @@ protected:
     void InitData()
     {
         paths.insert(pair_path_to_texture(ID_TEXTURE_HelloTable, "res/Hello.png"));
-        InitTextureMapByPathMap();2
+        InitTextureMapByPathMap();
+    }
+    void Draw(){
+        SDL_RenderClear(render);
+        SDL_RenderCopy(render,textures.at(ID_TEXTURE_HelloTable),nullptr,nullptr);
+        SDL_RenderPresent(render);
     }
 };
 class CommandWindowSDLGame_1 : public Command, public SDLWindowSDLGame_1

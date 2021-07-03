@@ -12,6 +12,7 @@ public:
         // Init vector
         // commands.push_back();
         commands.push_back(new CommandWindowOpenGL);
+        commands.push_back(new CommandWindowSDLGame_1);
     }
     void Run()
     {

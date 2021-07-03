@@ -4,4 +4,5 @@
 #include"Commands/CommandLoad.hpp"
 #include"Commands/CommandWindow.hpp"
 #include"Commands/CommandWindowOpenGL.hpp"
+#include"Commands/CommandWindowSDLGame_1.hpp"
 #include"Commands/CommandChouse.hpp"
