@@ -11,5 +11,4 @@ int main()
     commands.push_back(new CommandWindow);
     CommandChouse chouse(commands);
     chouse.Run();
-   
 }

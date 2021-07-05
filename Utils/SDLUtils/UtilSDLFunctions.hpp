@@ -64,7 +64,7 @@ SDL_Texture *InitTextureFromSurface(SDL_Surface *surface, SDL_Renderer *renderer
     SDL_FreeSurface(surface);
     return texture;
 }
-bool GetKeyDownUp(map_keys keys, int key)
+bool GetKeyDownUp(map_keys &keys, int key)
 {
     try
     {
@@ -75,7 +75,7 @@ bool GetKeyDownUp(map_keys keys, int key)
         return false;
     }
 }
-void KeyCheck(map_keys keys, SDL_Keycode key, bool down_up)
+void KeyCheck(map_keys &keys, SDL_Keycode key, bool down_up)
 {
     try
     {

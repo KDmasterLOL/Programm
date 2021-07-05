@@ -1,6 +1,5 @@
 #pragma once
 #include <Commands.hpp>
-
 class SDLWindowSDLGame_1 : public SDL_class
 {
 protected:
@@ -21,7 +20,7 @@ protected:
     void Draw(){
         SDL_RenderClear(render);
         SDL_RenderCopy(render,textures.at(ID_TEXTURE_HelloTable),nullptr,nullptr);
-        SDL_RenderPresent(render);
+            SDL_RenderPresent(render);
     }
 };
 class CommandWindowSDLGame_1 : public Command, public SDLWindowSDLGame_1
@@ -40,5 +39,6 @@ public:
         if (!Init())
             return;
         LoapSDL();
+        QuitSDL();
     }
 };
