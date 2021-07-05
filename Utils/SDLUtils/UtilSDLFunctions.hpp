@@ -12,9 +12,9 @@ void InitImage(int image_flag = IMG_INIT_PNG)
     if (IMG_Init(image_flag) != image_flag)
         throw std::runtime_error(std::string("IMG not init:") + std::string(IMG_GetError()));
 }
-void InitWnd(SDL_Window **window, std::string name = "Window",
+void InitWnd(SDL_Window **window, int w = 800, int h = 600,
+             std::string name = "Window",
              Uint32 flags = SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL,
-             int w = 800, int h = 600,
              int x = SDL_WINDOWPOS_UNDEFINED, int y = SDL_WINDOWPOS_UNDEFINED)
 {
     *window = SDL_CreateWindow(name.c_str(), x, y, w, h, flags);
@@ -64,6 +64,11 @@ SDL_Texture *InitTextureFromSurface(SDL_Surface *surface, SDL_Renderer *renderer
     SDL_FreeSurface(surface);
     return texture;
 }
+SDL_Texture *InitTextureFromPath(std::string path, SDL_Surface *surface_screen, SDL_Renderer *renderer)
+{
+    SDL_Surface *buff_surface = InitSurfaceFromFile(path.c_str(), surface_screen);
+    return InitTextureFromSurface(buff_surface, renderer);
+}
 bool GetKeyDownUp(map_keys &keys, int key)
 {
     try
@@ -85,4 +90,16 @@ void KeyCheck(map_keys &keys, SDL_Keycode key, bool down_up)
     {
         keys.insert(std::pair<SDL_Keycode, bool>(key, down_up));
     }
+}
+void InitGameObject(GameObjectStruct &game_object)
+{
+    switch (game_object.id)
+    {
+    case ID_GAME_OBJECTS::ID_Background:
+
+        break;
+    case ID_GAME_OBJECTS::ID_Player:
+        break;
+    }
+    game_object.game_object = new
 }

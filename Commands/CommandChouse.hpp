@@ -19,20 +19,20 @@ public:
     void Run()
     {
 
-        std::cin.exceptions(std::ios_base::badbit | std::ios_base::failbit);
+        cin.exceptions(std::ios_base::badbit | std::ios_base::failbit);
         while (play)
         {
             for (int comm = 0; comm < commands.size(); comm++)
             {
-                std::cout << comm << ".";
+                cout << comm << ".";
                 commands[comm]->ShowCommandName();
             }
-            std::cout << "Chouse command - ";
+            cout << "Chouse command - ";
             int comm;
 
             try
             {
-                std::cin >> comm;
+                cin >> comm;
 #ifdef linux
                 system("clear");
 #else
@@ -43,13 +43,14 @@ public:
             }
             catch (std::ios::failure exc)
             {
-                std::cerr << "not actual enter, try again enter number" << std::endl;
-                std::cin.clear();
-                std::cin.ignore(32767, '\n');
+                
+                std::cerr << "not actual enter, try again enter number" << endl;
+                cin.clear();
+                cin.ignore(32767, '\n');
             }
             catch (std::out_of_range exc)
             {
-                std::cout << "enter again number of list" << std::endl;
+                cout << "enter again number of list" << endl;
             }
         }
     }

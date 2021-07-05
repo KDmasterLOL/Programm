@@ -3,24 +3,27 @@
 class SDLWindowSDLGame_1 : public SDL_class
 {
 protected:
-    enum ID_TEXTURES
+    enum ID_OBJECTS
     {
-        // ID_TEXTURE_
-        ID_TEXTURE_HelloTable,
-    };
-    enum ID_OBJECTS{
         // ID_OBJECT_
         ID_OBJECT_Background,
     };
     void InitData()
     {
-        paths.insert(pair_path_to_texture(ID_TEXTURE_HelloTable, "res/Hello.png"));
-        InitTextureMapByPathMap();
+        SDL_Rect buff_rc = SDL_Rect{0, 0, window_width, window_height};
+        std::string buff_path = "res/Hello.png";
+        game_objects.insert(pair_game_objects(
+            ID_OBJECT_Background,
+            GameObjectStruct{buff_rc, buff_path}));
     }
-    void Draw(){
+    void InitObjects()
+    {
+        
+    }
+    void Draw()
+    {
         SDL_RenderClear(render);
-        SDL_RenderCopy(render,textures.at(ID_TEXTURE_HelloTable),nullptr,nullptr);
-            SDL_RenderPresent(render);
+        SDL_RenderPresent(render);
     }
 };
 class CommandWindowSDLGame_1 : public Command, public SDLWindowSDLGame_1

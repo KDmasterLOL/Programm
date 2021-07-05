@@ -1,12 +1,12 @@
 #pragma once
 #include "GameObject.hpp"
-class Player : public GameObject
+class Player : public GameObjectStruct
 {
 private:
     float speed;
 
 public:
-    Player(SDL_Texture *texture, SDL_Rect rect, float speed) : GameObject(texture, rect)
+    Player(SDL_Texture *texture, SDL_Rect rect, float speed) : GameObjectStruct(texture, rect)
     {
         this.speed = speed;
     }

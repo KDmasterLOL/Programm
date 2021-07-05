@@ -34,12 +34,7 @@ public:
     }
     bool ReadLatestFile()
     {
-        char *buff = new char[1000];
-        file_size = latest_files.tellg();
-        latest_files.seekg(0, latest_files.beg);
-        latest_files.read(buff, file_size);
-        file_text = buff;
-        delete[] buff;
+        ReadFile(file_latest_file_name, file_text);
         if (!file_text.empty())
             return true;
         else
@@ -48,7 +43,7 @@ public:
     bool FoundLatestFiles()
     {
         std::string buffer;
-        for (int letter = 0; letter < file_size; letter++)
+        for (int letter = 0; letter < file_text.size(); letter++)
         {
             if (file_text[letter] != ';')
                 buffer.push_back(file_text[letter]);
@@ -75,29 +70,39 @@ public:
         std::cout << "Enter path to file";
         if (!latest_files_names.empty())
             std::cout << " or chouse latest file path";
-        std::cout << std::endl;
+            cout<<"(command \"exit\" to exit)"<<endl;
         std::string path;
         int number = 0;
+        file.exceptions(std::fstream::failbit | std::fstream::badbit);
         while (std::cin >> path)
         {
-            if (!path.empty())
+            try
             {
-                if (path[0] >= 48 && path[0] <= 57)
+                if (!path.empty())
                 {
-                    number = atoi(path.data());
-                    if (latest_files_names.size() >= number)
+                    if(path == "exit")break;
+                    else if (path[0] >= 48 && path[0] <= 57)
                     {
-                        file.open(latest_files_names.at(number));
+                        number = atoi(path.data());
+                        if (latest_files_names.size() >= number)
+                        {
+                            file.open(latest_files_names.at(number));
+                            break;
+                        }
+                    }
+                    else
+                    {
+                        file.open(path.c_str());
                         break;
                     }
                 }
-                else
-                {
-                    file.open(path.c_str());
-                    break;
-                }
             }
-            std::cout << "Enter again" << std::endl;
+            catch (std::fstream::failure exc)
+            {
+                cerr << exc.what() << endl;
+                std::cout << "Enter again" << std::endl;
+                continue;
+            }
         }
     }
     void Run()
@@ -117,9 +122,5 @@ public:
         else
             std::cout << "latest files not open" << std::endl;
         EnterUser();
-        if (file.is_open())
-            std::cout << "file open" << std::endl;
-        else
-            std::cout << "file not open" << std::endl;
     }
 };

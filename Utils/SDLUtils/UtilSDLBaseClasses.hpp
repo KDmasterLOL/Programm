@@ -4,27 +4,25 @@
 class SDL_class
 {
 protected:
+    // Variables of class
     SDL_Window *window;
     SDL_Surface *window_surface;
     SDL_Renderer *render;
-    map_texture textures;
-    map_path_to_texture paths;
+    int window_height = 600,window_width = 800;
+    map_game_objects game_objects;
     map_keys keys;
-
-public:
-    SDL_class() {}
-    ~SDL_class() {}
-
+    // Function of class
     virtual bool Init()
     {
         try
         {
             InitSDL();
             InitImage();
-            InitWnd(&window);
+            InitWnd(&window,window_width,window_height);
             InitWndSurf(window, &window_surface);
             InitRenderer(window, &render);
             InitData();
+            InitObjects();
             return true;
         }
         catch (runtime_error exc)
@@ -36,31 +34,15 @@ public:
     virtual void Draw() {}
     virtual void ProccesingKey() {}
     virtual void InitData() {}
-    void InitTextureMapByPathMap()
-    {
-        for (auto path : paths)
-        {
-            SDL_Texture *buffer = InitTextureFromSurface(
-                InitSurfaceFromFile(path.second, window_surface),
-                render);
-            textures.insert(pair_texture(path.first, buffer));
-        }
-    }
+    virtual void InitObjects() {}
+
     virtual void QuitSDL()
     {
         SDL_DestroyWindow(window);
         window_surface = nullptr;
-        for (auto &texture : textures)
-        {
-            if (texture.second != nullptr)
-            {
-                SDL_DestroyTexture(texture.second);
-                texture.second = nullptr;
-            }
-        }
+
         SDL_DestroyRenderer(render);
         keys.clear();
-        textures.clear();
         IMG_Quit();
         SDL_Quit();
     }
