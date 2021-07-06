@@ -30,7 +30,7 @@ void InitWndSurf(SDL_Window *window, SDL_Surface **surface)
 void InitRenderer(SDL_Window *window, SDL_Renderer **render, Uint32 flag = SDL_RENDERER_ACCELERATED)
 {
     *render = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
-    if (render == nullptr)
+    if (*render == NULL)
         throw std::runtime_error("Renderer not init:" + std::string(SDL_GetError()));
     SDL_SetRenderDrawColor(*render, 0, 0, 0, 0);
 }
@@ -40,13 +40,14 @@ void InitContextGL(SDL_GLContext *gl_context, SDL_Window *window)
     if (*gl_context == nullptr)
         throw std::runtime_error("Context GL not init:" + std::string(SDL_GetError()));
 }
-SDL_Surface *InitSurfaceFromFile(std::string path, SDL_Surface *surface_screen)
+SDL_Surface *InitSurfaceFromFile(std::string path, SDL_Surface *surface_screen = nullptr)
 {
-    SDL_Surface *buffer_image, *buffer_texture;
+    SDL_Surface *buffer_image = nullptr, *buffer_texture = nullptr;
     buffer_texture = IMG_Load(path.c_str());
     if (buffer_texture == nullptr)
         throw std::runtime_error(path + " not createn" + std::string(IMG_GetError()));
-    buffer_image = SDL_ConvertSurface(buffer_texture, surface_screen->format, 0);
+    else if(surface_screen != nullptr)
+        buffer_image = SDL_ConvertSurface(buffer_texture, surface_screen->format, 0);
     if (buffer_image != nullptr)
     {
         SDL_FreeSurface(buffer_texture);
@@ -64,7 +65,7 @@ SDL_Texture *InitTextureFromSurface(SDL_Surface *surface, SDL_Renderer *renderer
     SDL_FreeSurface(surface);
     return texture;
 }
-SDL_Texture *InitTextureFromPath(std::string path, SDL_Surface *surface_screen, SDL_Renderer *renderer)
+SDL_Texture *InitTextureFromPath(std::string path,SDL_Renderer *renderer, SDL_Surface *surface_screen = nullptr)
 {
     SDL_Surface *buff_surface = InitSurfaceFromFile(path.c_str(), surface_screen);
     return InitTextureFromSurface(buff_surface, renderer);
@@ -90,16 +91,4 @@ void KeyCheck(map_keys &keys, SDL_Keycode key, bool down_up)
     {
         keys.insert(std::pair<SDL_Keycode, bool>(key, down_up));
     }
-}
-void InitGameObject(GameObjectStruct &game_object)
-{
-    switch (game_object.id)
-    {
-    case ID_GAME_OBJECTS::ID_Background:
-
-        break;
-    case ID_GAME_OBJECTS::ID_Player:
-        break;
-    }
-    game_object.game_object = new
 }

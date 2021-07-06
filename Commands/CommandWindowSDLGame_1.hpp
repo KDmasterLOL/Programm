@@ -8,22 +8,15 @@ protected:
         // ID_OBJECT_
         ID_OBJECT_Background,
     };
-    void InitData()
+
+    void InitGameObjectsStruct()
     {
         SDL_Rect buff_rc = SDL_Rect{0, 0, window_width, window_height};
         std::string buff_path = "res/Hello.png";
-        game_objects.insert(pair_game_objects(
+        game_objects_struct.insert(pair_game_objects_struct(
             ID_OBJECT_Background,
-            GameObjectStruct{buff_rc, buff_path}));
-    }
-    void InitObjects()
-    {
+            GameObjectStruct{buff_rc, buff_path, ID_GAME_OBJECTS::ID_Background}));
         
-    }
-    void Draw()
-    {
-        SDL_RenderClear(render);
-        SDL_RenderPresent(render);
     }
 };
 class CommandWindowSDLGame_1 : public Command, public SDLWindowSDLGame_1

@@ -6,10 +6,11 @@ class SDL_class
 protected:
     // Variables of class
     SDL_Window *window;
-    SDL_Surface *window_surface;
     SDL_Renderer *render;
-    int window_height = 600,window_width = 800;
-    map_game_objects game_objects;
+    SDL_Surface *window_surface;
+    int window_height = 600, window_width = 800;
+    map_game_objects_struct game_objects_struct;
+    map_game_objects_class game_objects_class;
     map_keys keys;
     // Function of class
     virtual bool Init()
@@ -18,11 +19,9 @@ protected:
         {
             InitSDL();
             InitImage();
-            InitWnd(&window,window_width,window_height);
-            InitWndSurf(window, &window_surface);
+            InitWnd(&window, window_width, window_height);
             InitRenderer(window, &render);
             InitData();
-            InitObjects();
             return true;
         }
         catch (runtime_error exc)
@@ -31,21 +30,21 @@ protected:
             return false;
         }
     }
-    virtual void Draw() {}
-    virtual void ProccesingKey() {}
-    virtual void InitData() {}
-    virtual void InitObjects() {}
-
-    virtual void QuitSDL()
+    virtual void InitGameObjectsStruct() {}
+    virtual void InitData()
     {
-        SDL_DestroyWindow(window);
-        window_surface = nullptr;
-
-        SDL_DestroyRenderer(render);
-        keys.clear();
-        IMG_Quit();
-        SDL_Quit();
+        InitGameObjectsStruct();
+        InitGameObjectsClass();
     }
+    void InitGameObjectsClass()
+    {
+        for (auto game_object : game_objects_struct)
+        {
+            game_objects_class.insert(pair_game_objects_class(game_object.first, MakeGameObjectClass(game_object.second)));
+        }
+        game_objects_struct.clear();
+    }
+
     virtual void LoapSDL()
     {
         bool play = true;
@@ -73,6 +72,44 @@ protected:
             play = !GetKeyDownUp(keys, SDLK_ESCAPE);
             ProccesingKey();
             Draw();
+        }
+    }
+    virtual void Draw()
+    {
+        SDL_RenderClear(render);
+        DrawGameObjectsClass();
+        SDL_RenderPresent(render);
+    }
+    void DrawGameObjectsClass()
+    {
+        for (auto game_object : game_objects_class)
+        {
+            SDL_RenderCopy(render, game_object.second->GetTexture(), nullptr, game_object.second->GetRect());
+        }
+    }
+    virtual void ProccesingKey() {}
+    virtual void QuitSDL()
+    {
+        SDL_DestroyWindow(window);
+        SDL_DestroyRenderer(render);
+        for (auto game_object : game_objects_class)
+        {
+            game_object.second->~GameObjectClass();
+        }
+        game_objects_class.clear();
+        keys.clear();
+        IMG_Quit();
+        SDL_Quit();
+    }
+    GameObjectClass *MakeGameObjectClass(GameObjectStruct &game_object)
+    {
+        SDL_Texture *buffer_texture = InitTextureFromPath(game_object.path_to_texture, render);
+        switch (game_object.id)
+        {
+        case ID_GAME_OBJECTS::ID_Background:
+            return new Background(buffer_texture, game_object.rect, SDL_Rect{0, 0, window_width, window_height}, game_objects_class);
+        default:
+            return nullptr;
         }
     }
 };
