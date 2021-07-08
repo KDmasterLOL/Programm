@@ -46,7 +46,7 @@ SDL_Surface *InitSurfaceFromFile(std::string path, SDL_Surface *surface_screen =
     buffer_texture = IMG_Load(path.c_str());
     if (buffer_texture == nullptr)
         throw std::runtime_error(path + " not createn" + std::string(IMG_GetError()));
-    else if(surface_screen != nullptr)
+    else if (surface_screen != nullptr)
         buffer_image = SDL_ConvertSurface(buffer_texture, surface_screen->format, 0);
     if (buffer_image != nullptr)
     {
@@ -65,7 +65,7 @@ SDL_Texture *InitTextureFromSurface(SDL_Surface *surface, SDL_Renderer *renderer
     SDL_FreeSurface(surface);
     return texture;
 }
-SDL_Texture *InitTextureFromPath(std::string path,SDL_Renderer *renderer, SDL_Surface *surface_screen = nullptr)
+SDL_Texture *InitTextureFromPath(std::string path, SDL_Renderer *renderer, SDL_Surface *surface_screen = nullptr)
 {
     SDL_Surface *buff_surface = InitSurfaceFromFile(path.c_str(), surface_screen);
     return InitTextureFromSurface(buff_surface, renderer);

@@ -5,7 +5,7 @@ class Background : public GameObjectClass // Texture,Rect,window_rect,game_objec
 {
 private:
 public:
-    Background(SDL_Texture *texture, SDL_Rect rect, SDL_Rect window_rect,
+    Background(SDL_Texture *texture, SDL_FRect rect, SDL_Rect window_rect,
                map_game_objects_class &game_objects)
         : GameObjectClass(texture, rect, window_rect, game_objects)
     {

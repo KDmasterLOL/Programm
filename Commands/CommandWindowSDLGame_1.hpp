@@ -7,16 +7,19 @@ protected:
     {
         // ID_OBJECT_
         ID_OBJECT_Background,
+        ID_OBJECT_Player,
     };
 
     void InitGameObjectsStruct()
     {
-        SDL_Rect buff_rc = SDL_Rect{0, 0, window_width, window_height};
-        std::string buff_path = "res/Hello.png";
-        game_objects_struct.insert(pair_game_objects_struct(
-            ID_OBJECT_Background,
-            GameObjectStruct{buff_rc, buff_path, ID_GAME_OBJECTS::ID_Background}));
-        
+        vector<GameObjectStruct> buff_game_objects;
+        // buff_game_objects.push_back({});
+        buff_game_objects.push_back({SDL_FRect{0, 0, (float)window_width, (float)window_height}, "res/Hello.png", ID_GAME_OBJECTS::ID_Background, ID_OBJECT_Background});
+        buff_game_objects.push_back({SDL_FRect{0, 0, 100, 100}, "res/Hello.png", ID_GAME_OBJECTS::ID_Player, ID_OBJECT_Player});
+        for (auto game_object : buff_game_objects)
+        {
+            AddGameObjectStructToMap(game_object);
+        }
     }
 };
 class CommandWindowSDLGame_1 : public Command, public SDLWindowSDLGame_1

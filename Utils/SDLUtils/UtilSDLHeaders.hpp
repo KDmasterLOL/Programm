@@ -19,7 +19,7 @@ using map_path_to_texture = std::map<int,string>;
 using pair_path_to_texture = std::pair<int,string>;
 using pair_texture = std::pair<int, SDL_Texture *>;
 // Include
+#include "Utils/SDLUtils/UtilSDLFunctions.hpp"
 #include "Utils/SDLUtils/GameClasses/Player.hpp"
 #include "Utils/SDLUtils/GameClasses/Block.hpp"
 #include "Utils/SDLUtils/GameClasses/Background.hpp"
-#include "Utils/SDLUtils/UtilSDLFunctions.hpp"

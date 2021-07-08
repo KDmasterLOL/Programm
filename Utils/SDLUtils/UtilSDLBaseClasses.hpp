@@ -11,6 +11,7 @@ protected:
     int window_height = 600, window_width = 800;
     map_game_objects_struct game_objects_struct;
     map_game_objects_class game_objects_class;
+    float player_speed = 0.1;
     map_keys keys;
     // Function of class
     virtual bool Init()
@@ -31,6 +32,12 @@ protected:
         }
     }
     virtual void InitGameObjectsStruct() {}
+    void AddGameObjectStructToMap(GameObjectStruct game_object)
+    {
+        game_objects_struct.insert(pair_game_objects_struct(
+            game_object.id_object,
+            game_object));
+    }
     virtual void InitData()
     {
         InitGameObjectsStruct();
@@ -70,6 +77,7 @@ protected:
                 }
             }
             play = !GetKeyDownUp(keys, SDLK_ESCAPE);
+            GameObjectsClassUpdate();
             ProccesingKey();
             Draw();
         }
@@ -84,7 +92,14 @@ protected:
     {
         for (auto game_object : game_objects_class)
         {
-            SDL_RenderCopy(render, game_object.second->GetTexture(), nullptr, game_object.second->GetRect());
+            SDL_RenderCopyF(render, game_object.second->GetTexture(), nullptr, game_object.second->GetRect());
+        }
+    }
+    void GameObjectsClassUpdate()
+    {
+        for (auto game_object : game_objects_class)
+        {
+            game_object.second->Update();
         }
     }
     virtual void ProccesingKey() {}
@@ -104,10 +119,13 @@ protected:
     GameObjectClass *MakeGameObjectClass(GameObjectStruct &game_object)
     {
         SDL_Texture *buffer_texture = InitTextureFromPath(game_object.path_to_texture, render);
-        switch (game_object.id)
+        SDL_Rect window_rect = {0, 0, window_width, window_height};
+        switch (game_object.id_game_object)
         {
         case ID_GAME_OBJECTS::ID_Background:
-            return new Background(buffer_texture, game_object.rect, SDL_Rect{0, 0, window_width, window_height}, game_objects_class);
+            return new Background(buffer_texture, game_object.rect, window_rect, game_objects_class);
+        case ID_GAME_OBJECTS::ID_Player:
+            return new Player(buffer_texture, game_object.rect, window_rect, game_objects_class, player_speed, keys);
         default:
             return nullptr;
         }
